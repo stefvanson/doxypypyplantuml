@@ -49,5 +49,5 @@ The py_filter file (for Unix-like operating systems) should therefore become:
 
 ```py
 #!/bin/bash
-doxypypy -a -c $1 | ./doc/fix_plantuml_in_docstrings.py $1
+doxypypy -a -c $1 | doxypypyplantuml $1
 ```
