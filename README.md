@@ -51,3 +51,31 @@ The py_filter file (for Unix-like operating systems) should therefore become:
 #!/bin/bash
 doxypypy -a -c $1 | doxypypyplantuml $1
 ```
+
+## Development notes
+
+Before committing always first run `./run.py` and check the output.
+
+Following the instructions on:
+https://packaging.python.org/en/latest/tutorials/packaging-projects/
+
+To build the package:
+
+```bash
+rm -r dist
+python3 -m build
+```
+
+To upload the package to testpypi:
+
+```bash
+python3 -m twine upload --repository testpypi dist/*
+```
+
+### To do list
+
+- Add arparser to doxypypyplantuml.py
+- Add tests
+- Add a changelog
+- Look at classifiers of https://pypi.org/project/doxypypy/
+- Upload for real
