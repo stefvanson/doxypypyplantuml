@@ -12,9 +12,10 @@ Doxygen tagged documentation.
 So far so good.
 
 **Unfortunately, doxypypy performs some transformations when it
-sees things like colons and indentation; these are typically used in docstrings
-for documenting for example function arguments. This can become problematic
-when you are inlining PlantUML diagram code.**
+sees things like colons (it thinks it's an argument?); these are typically used
+in docstrings for documenting for example function arguments. This can become
+problematic when you are inlining PlantUML diagram code.** For an example refer
+to "Bug Example" below.
 
 One way to fix this is to fix it in doxypypy. Unfortunately the code is really
 hard to understand and unmaintained.
@@ -72,6 +73,56 @@ To upload the package to testpypi:
 python3 -m twine upload --repository testpypi dist/*
 ```
 
+pip install -i https://test.pypi.org/simple/ doxypypyplantuml==0.1.0
+
+### Bug example
+
+The following input, containing a PlantUML diagram in the class docstring, results in the
+incorrect doxypypy output that's below it (it's invalid PlantUML syntax).
+
+```py
+class SomeStateMachine:
+    """The state machine for bla bla.
+
+    It comprehends the following state machine:
+
+    @startuml
+    State_A: On Entry / Transmit something
+    State_A: During / Retry every second
+
+    State_B: On Entry / Transmit GET_CCP_VERSION CRO
+    State_B: During / Retry every second
+
+    [*] -d-> State_A
+    State_A -d-> State_B: connect()
+
+    @enduml
+    """
+    def __init__(self, msg_handler: CcpMessageHandler):
+        pass
+```
+
+```py
+## @brief The state machine for bla bla.
+#
+#    It comprehends the following state machine:
+#
+#    @startuml
+# 	State_A	On Entry / Transmit something
+# 	State_A	During / Retry every second
+#
+# 	State_B	On Entry / Transmit GET_CCP_VERSION CRO
+# 	State_B	During / Retry every second
+#
+#    [*] -d-> State_A
+#    State_A -d-> State_B: connect()
+#
+#    @enduml
+#
+class SomeStateMachine:
+    def __init__(self, msg_handler: CcpMessageHandler):
+        pass
+```
 ### To do list
 
 - Add arparser to doxypypyplantuml.py
