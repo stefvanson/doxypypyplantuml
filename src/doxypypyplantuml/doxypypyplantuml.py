@@ -148,7 +148,7 @@ class DoxypypyPlantUml:
                 print(current_line)
 
 
-if __name__ == "__main__":
+def main():
     description = ("Tool for correcting Doxygen PlantUML code blocks in doxypypy output. "
                    "This tool is intended to be used in tandem with doxypypy. "
                    "Please follow the usage instructions of doxypypy and update your "
@@ -160,3 +160,7 @@ if __name__ == "__main__":
     args = argparser.parse_args()
     program = DoxypypyPlantUml(args.original_file)
     program.process_input()
+
+
+if __name__ == "__main__":
+    main()

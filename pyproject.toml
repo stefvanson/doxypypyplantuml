@@ -4,7 +4,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "doxypypyplantuml"
-version = "0.2.0"
+version = "0.2.1"
 authors = [
   { name="Stef van Son", email="8822160+stefvanson@users.noreply.github.com" },
 ]
@@ -33,4 +33,4 @@ keywords = [
 "Bug Tracker" = "https://github.com/stefvanson/doxypypyplantuml/issues"
 
 [project.scripts]
-doxypypyplantuml = "doxypypyplantuml.doxypypyplantuml"
+doxypypyplantuml = "doxypypyplantuml.doxypypyplantuml:main"
