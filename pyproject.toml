@@ -28,4 +28,4 @@ keywords = [
 "Bug Tracker" = "https://github.com/stefvanson/doxypypyplantuml/issues"
 
 [project.scripts]
-doxypypyplantuml = "doxypypyplantuml.doxypypyplantuml:main"
+doxypypyplantuml = "doxypypyplantuml.doxypypyplantuml"
