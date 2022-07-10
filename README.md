@@ -57,23 +57,9 @@ doxypypy -a -c $1 | doxypypyplantuml $1
 
 Before committing always first run `./run.py` and check the output.
 
-Following the instructions on:
-https://packaging.python.org/en/latest/tutorials/packaging-projects/
+I've followed the instructions on https://packaging.python.org/en/latest/tutorials/packaging-projects/ to create this package.
 
-To build the package:
-
-```bash
-rm -r dist
-python3 -m build
-```
-
-To upload the package to testpypi:
-
-```bash
-python3 -m twine upload --repository testpypi dist/*
-```
-
-pip install -i https://test.pypi.org/simple/ doxypypyplantuml==0.1.0
+To build and upload the package simply run `./run.py --upload`.
 
 ### Bug example
 
@@ -123,5 +109,3 @@ class SomeStateMachine:
     def __init__(self, msg_handler: CcpMessageHandler):
         pass
 ```
-### To do list
-- Upload for real
