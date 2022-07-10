@@ -4,6 +4,7 @@
 """
 import argparse
 import os
+import shutil
 import subprocess
 import sys
 
@@ -50,9 +51,23 @@ def _run_static_analysis():
     subprocess.run(command, env=env, check=False)
 
 
+def _build_and_upload():
+    if os.path.isdir('dist'):
+        shutil.rmtree('dist')
+    command = ['python3', '-m', 'build']
+    print(f"== Building package ==\n> {' '.join(command)}\n")
+    subprocess.run(command, check=True)
+    command = ['python3', '-m', 'twine', 'upload', '--repository', 'testpypi', 'dist/*']
+    print(f"== Uploading package ==\n> {' '.join(command)}\n")
+    subprocess.run(command, check=True)
+
+
 def _create_argparser():
     description = ("Helper script for testing the doxypypyplantuml module.")
     argparser = argparse.ArgumentParser(description=description)
+    argparser.add_argument('--upload', action='store_true',
+                           help="Builds the package and uploads it to the Python Package "
+                                "Index.")
     argparser.add_argument('--unit', action='store',
                            nargs='?', type=str, const=RUN_ALL_TESTS,
                            help="Runs the unit tests. Specify a value with the option "
@@ -65,14 +80,15 @@ def _create_argparser():
 
 
 input_args = _create_argparser().parse_args()
-print(input_args)
+if input_args.upload:
+    _build_and_upload()
 if input_args.unit:
     _run_unit_tests(input_args)
 if input_args.style:
     _run_style_check()
 if input_args.static:
     _run_static_analysis()
-if not (input_args.unit or input_args.style or input_args.static):
+if not (input_args.upload or input_args.unit or input_args.style or input_args.static):
     _run_unit_tests(input_args)
     _run_style_check()
     _run_static_analysis()
