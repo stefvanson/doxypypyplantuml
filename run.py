@@ -7,10 +7,13 @@ import os
 import subprocess
 import sys
 
+RUN_ALL_TESTS = "Run all"
+
 
 def _run_unit_tests(args):
     command = ['python3', '-m', 'unittest']
-    if not args.unit:
+    if args.unit in [RUN_ALL_TESTS, None]:
+        # If only --unit specified or running just everything (i.e. unit == None)
         command += ['discover', './tests/']
     else:
         command += [args.unit]
@@ -52,8 +55,9 @@ def _create_argparser():
                    " reading and setting internal variables and flashing a new binary.")
     argparser = argparse.ArgumentParser(description=description)
     argparser.add_argument('--unit', action='store',
-                           nargs='?', type=str,
-                           help="Runs the unit tests.")
+                           nargs='?', type=str, const=RUN_ALL_TESTS,
+                           help="Runs the unit tests. Specify a value with the option "
+                                "like tests.test_doxypypyplantuml to run specific tests.")
     argparser.add_argument('--style', action='store_true',
                            help="Runs the style checker.")
     argparser.add_argument('--static', action='store_true',
@@ -62,6 +66,7 @@ def _create_argparser():
 
 
 input_args = _create_argparser().parse_args()
+print(input_args)
 if input_args.unit:
     _run_unit_tests(input_args)
 if input_args.style:
