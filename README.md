@@ -124,6 +124,4 @@ class SomeStateMachine:
         pass
 ```
 ### To do list
-
-- Look at classifiers of https://pypi.org/project/doxypypy/
 - Upload for real
