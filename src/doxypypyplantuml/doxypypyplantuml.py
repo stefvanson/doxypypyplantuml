@@ -15,7 +15,7 @@ class PlantUmlBlock:
 
     def _get_lines_with_normalized_indentation(self, lines):
         startuml_line = lines[0]
-        indent = startuml_line.find('@')
+        indent = self._get_index_of_start_tag(startuml_line)
         output_lines = []
         for line in lines:
             if line[indent:]:
@@ -23,6 +23,10 @@ class PlantUmlBlock:
             else:
                 output_lines.append("\n")
         return output_lines
+
+    def _get_index_of_start_tag(self, line):
+        # Tag can start with an @ or an \ in Doxygen
+        return max(line.find('@'), line.find('\\'))
 
     def output_in_doxypypy_style(self, doxypypy_line):
         """Outputs the PlantUmlBlock in the same style as doxypypy, so starting with the
