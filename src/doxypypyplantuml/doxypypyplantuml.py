@@ -2,6 +2,7 @@
 """Package contain the doxypyplantuml implementation. More information can be found in the
 project's README.md.
 """
+import argparse
 import sys
 from typing import List
 
@@ -119,26 +120,43 @@ class PlantUmlBlockFinder:
         return self._blocks[index]
 
 
-def main():
-    original_filepath = sys.argv[1]
-    plantuml_finder = PlantUmlBlockFinder(original_filepath)
+class DoxypypyPlantUml:
+    def __init__(self, original_input_file: str):
+        self._block_finder = PlantUmlBlockFinder(original_input_file)
 
-    # Whenever we come across a startuml tag we simply stop printing the lines until we
-    # encounter an enduml tag. Then we inject back the original uml block content.
-    skip_uml_line = False
-    uml_block_index = 0
-    for current_line in sys.stdin:
-        current_line = current_line.rstrip()
-        if PlantUmlBlockFinder.line_contains_startuml_tag(current_line):
-            skip_uml_line = True
-        elif PlantUmlBlockFinder.line_contains_enduml_tag(current_line):
-            current_block = plantuml_finder.get_plantuml_block(uml_block_index)
-            current_block.output_in_doxypypy_style(current_line)
-            uml_block_index += 1
-            skip_uml_line = False
-        elif not skip_uml_line:
-            print(current_line)
+    def process_input(self):
+        """Read input from stdin and process it by putting the original PlantUML blocks
+        back in once they are encountered.
+
+        It works as follows. It normally simply prints stdin to stdout.
+        Whenever we come across a startuml tag we simply stop printing the lines until
+        we encounter an enduml tag. Then we inject back the original uml block content
+        with correct indentation.
+        """
+        skip_uml_line = False
+        uml_block_index = 0
+        for current_line in sys.stdin:
+            current_line = current_line.rstrip()
+            if PlantUmlBlockFinder.line_contains_startuml_tag(current_line):
+                skip_uml_line = True
+            elif PlantUmlBlockFinder.line_contains_enduml_tag(current_line):
+                current_block = self._block_finder.get_plantuml_block(uml_block_index)
+                current_block.output_in_doxypypy_style(current_line)
+                uml_block_index += 1
+                skip_uml_line = False
+            elif not skip_uml_line:
+                print(current_line)
 
 
 if __name__ == "__main__":
-    main()
+    description = ("Tool for correcting Doxygen PlantUML code blocks in doxypypy output. "
+                   "This tool is intended to be used in tandem with doxypypy. "
+                   "Please follow the usage instructions of doxypypy and update your "
+                   "py_filter file to contain `doxypypy -a -c $1 | doxypypyplantuml $1`.")
+    argparser = argparse.ArgumentParser(prog="doxypypylantuml",
+                                        description=description)
+    argparser.add_argument("original_file", help="The original input file, from which the"
+                           " PlantUML blocks are taken for the output.")
+    args = argparser.parse_args()
+    program = DoxypypyPlantUml(args.original_file)
+    program.process_input()

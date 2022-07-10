@@ -51,8 +51,7 @@ def _run_static_analysis():
 
 
 def _create_argparser():
-    description = ("Tool for executing diagnostic activities with a physical ECU, such as"
-                   " reading and setting internal variables and flashing a new binary.")
+    description = ("Helper script for testing the doxypypyplantuml module.")
     argparser = argparse.ArgumentParser(description=description)
     argparser.add_argument('--unit', action='store',
                            nargs='?', type=str, const=RUN_ALL_TESTS,
