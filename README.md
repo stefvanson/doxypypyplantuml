@@ -125,6 +125,5 @@ class SomeStateMachine:
 ```
 ### To do list
 
-- Add a changelog
 - Look at classifiers of https://pypi.org/project/doxypypy/
 - Upload for real
