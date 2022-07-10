@@ -4,7 +4,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "doxypypyplantuml"
-version = "0.2.1"
+version = "1.0.0"
 authors = [
   { name="Stef van Son", email="8822160+stefvanson@users.noreply.github.com" },
 ]
