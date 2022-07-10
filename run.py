@@ -87,6 +87,7 @@ def _create_argparser():
 
 
 input_args = _create_argparser().parse_args()
+active_args = [True for arg in vars(input_args).values() if arg]
 if input_args.upload:
     _build_and_upload(for_real=False)
 if input_args.upload_release:
@@ -97,7 +98,7 @@ if input_args.style:
     _run_style_check()
 if input_args.static:
     _run_static_analysis()
-if not (input_args.upload or input_args.unit or input_args.style or input_args.static):
+if not [True for arg in vars(input_args).values() if arg]:
     _run_unit_tests(input_args)
     _run_style_check()
     _run_static_analysis()
