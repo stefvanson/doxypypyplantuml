@@ -51,13 +51,17 @@ def _run_static_analysis():
     subprocess.run(command, env=env, check=False)
 
 
-def _build_and_upload():
+def _build_and_upload(for_real=False):
     if os.path.isdir('dist'):
         shutil.rmtree('dist')
     command = ['python3', '-m', 'build']
     print(f"== Building package ==\n> {' '.join(command)}\n")
     subprocess.run(command, check=True)
-    command = ['python3', '-m', 'twine', 'upload', '--repository', 'testpypi', 'dist/*']
+    command = ['python3', '-m', 'twine', 'upload']
+    if not for_real:
+        command += ['--repository', 'testpypi', 'dist/*']
+    else:
+        command += ['dist/*']
     print(f"== Uploading package ==\n> {' '.join(command)}\n")
     subprocess.run(command, check=True)
 
@@ -66,6 +70,9 @@ def _create_argparser():
     description = ("Helper script for testing the doxypypyplantuml module.")
     argparser = argparse.ArgumentParser(description=description)
     argparser.add_argument('--upload', action='store_true',
+                           help="Builds the package and uploads it to the *Test* Python "
+                                "Package Index.")
+    argparser.add_argument('--upload-release', action='store_true',
                            help="Builds the package and uploads it to the Python Package "
                                 "Index.")
     argparser.add_argument('--unit', action='store',
@@ -81,7 +88,9 @@ def _create_argparser():
 
 input_args = _create_argparser().parse_args()
 if input_args.upload:
-    _build_and_upload()
+    _build_and_upload(for_real=False)
+if input_args.upload_release:
+    _build_and_upload(for_real=True)
 if input_args.unit:
     _run_unit_tests(input_args)
 if input_args.style:
