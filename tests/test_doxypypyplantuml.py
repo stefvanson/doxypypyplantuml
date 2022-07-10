@@ -2,8 +2,6 @@ import os
 import subprocess
 import unittest.mock
 
-import src.doxypypyplantuml.doxypypyplantuml as doxypypyplantuml
-
 
 class DoxypypyPlantUmlTests(unittest.TestCase):
     def test_fake_input_file(self):
@@ -19,7 +17,7 @@ class DoxypypyPlantUmlTests(unittest.TestCase):
         # Verify the output agains expected_output_file.py
         output_filepath = os.path.join('tests', 'test_doxypypyplantuml_resources',
                                        'expected_output_file.py')
-        with open(output_filepath, 'r') as output_file:
+        with open(output_filepath, 'r', encoding='utf-8') as output_file:
             line_nr = 0
             for output_line in stdout.split('\n'):
                 expected_output_line = output_file.readline().rstrip()

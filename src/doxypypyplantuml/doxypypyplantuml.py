@@ -46,7 +46,7 @@ class PlantUmlBlock:
     def __str__(self):
         block = "#### BLOCK_START ####\n"
         for line in self._lines:
-            block += line
+            block.join(line)
         block += "#### BLOCK_END ####"
         return block
 
@@ -55,7 +55,7 @@ class PlantUmlBlockFinder:
     """Class for locating the PlantUML code blocks in a file.
     """
     def __init__(self, filepath: str):
-        with open(filepath, 'r') as file:
+        with open(filepath, 'r', encoding='utf-8') as file:
             self._lines = file.readlines()
         self._blocks = self.parse_plantuml_blocks()
 
